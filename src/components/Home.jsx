@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { FavoriteContext } from "./FavoriteContext";
 import Post from "./Post";
 const Home = () => {
 	const [posts, setPosts] = useState(null);
 	const [loading, setLoading] = useState(true);
-
+	const [favorite, setFavorite] = useState([]);
 	useEffect(() => {
 		fetch("https://dummyapi.io/data/v1/post?limit=10", {
 			headers: {
@@ -25,7 +26,11 @@ const Home = () => {
 		);
 	}
 
-	return <Post postData={posts}></Post>;
+	return (
+		<FavoriteContext.Provider value={{ favorite, setFavorite }}>
+			<Post postData={posts}></Post>;
+		</FavoriteContext.Provider>
+	);
 };
 
 export default Home;

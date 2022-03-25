@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { FavoriteContext } from "./FavoriteContext";
+
 const PostChild = ({
 	userImage,
 	userName,
@@ -5,7 +8,22 @@ const PostChild = ({
 	postImage,
 	postDescription,
 	postTag,
+	postId,
 }) => {
+	const { favorite, setFavorite } = useContext(FavoriteContext);
+	let handleLikeButton = (e) => {
+		if (favorite.findIndex((val) => val.postId == postId) < 0) {
+			setFavorite([
+				...favorite,
+				{
+					postId: postId,
+					postImage: postImage,
+					postTag: postTag,
+					userName: userName,
+				},
+			]);
+		}
+	};
 	return (
 		<div className="group relative col-start-2 col-span-3 bg-white rounded-md px-4 py-4 shadow">
 			<div className="grid grid-rows-3 grid-flow-col grid-cols-9 pb-2">
@@ -19,12 +37,15 @@ const PostChild = ({
 					<h3 className="text-sm text-gray-500">
 						<div>
 							<span className="absolute inset-0"></span>
-							{new Date(new Date().valueOf(postDate)).toUTCString()}
+							{new Date(postDate).toUTCString()}
 						</div>
 					</h3>
 				</div>
 				<div className="row-span-3 col-start-9">
-					<button className="absolute text-4xl h-16 fill-transparent hover:text-5xl transition-all">
+					<button
+						className="absolute text-4xl h-16 fill-transparent hover:text-5xl transition-all"
+						onClick={handleLikeButton}
+					>
 						❤️
 						<p className="text-sm">Like</p>
 					</button>
